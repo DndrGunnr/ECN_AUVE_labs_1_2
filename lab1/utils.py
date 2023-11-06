@@ -8,7 +8,7 @@ import pickle
 import glob
 import matplotlib.pyplot as plt
 
-from labs.lab1.geometry import make_tf, apply_tf
+from geometry import make_tf, apply_tf
 
 # ---------------------------------------------
 # --------------DO NOT MODIFY -----------------
