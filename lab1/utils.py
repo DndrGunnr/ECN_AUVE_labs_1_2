@@ -95,12 +95,9 @@ def get_available_point_clouds(n_frame, actors):
 
     # TODO: retrieve point clouds in actor frame for all actors and merge them into one point cloud in ego frame
     for actor in actors[1:]:
-        # actor_to_world = get_actor_T_world(actor, n_frame)
-        lidar_data_actor = get_point_cloud(n_frame, actor) #in actor frame
-
+        pass 
         # TODO: map `lidar_data_actor` from actor frame to ego frame
-        # lidar_data_actor = apply_tf(np.linalg.inv(ego_to_world) @ actor_to_world , lidar_data_actor) #in ego frame
-        merged_pc = np.concatenate((merged_pc,lidar_data_actor), axis=0)
+        
     return merged_pc
 
 def get_boxes_in_sensor_frame(n_frame, actor):
@@ -129,14 +126,9 @@ def get_boxes_in_actor_frame(n_frame, actor): # TODO
     '''
 
     boxes = get_boxes_in_sensor_frame(n_frame, actor)
-    boxes = np.array(boxes).reshape(-1,8) # get boxes in global frame (N,8)
+    boxes = np.array(boxes).reshape(-1,8) #in sensor frame
 
     # TODO: map `boxes` from sensor frame to actor frame
-
-    # sensor_T_car = get_sensor_T_actor(actor, n_frame)  #TODO  np.eye(4)
-    # boxes_in_actor_frame = apply_tf(sensor_T_car, boxes)
-
-    # boxes = np.concatenate((boxes_in_actor_frame, boxes[:,3:]), axis=1)
 
 
     return boxes
@@ -157,17 +149,6 @@ def get_available_boxes_in_ego_frame(n_frame, actors):
 
     # TODO : retrieve boxes in actor frame for all actors
 
-    # for actor in actors[1:]:
-    #     actor_boxes = get_boxes_in_actor_frame(n_frame, actor) #in actor frame
-    #     boxes = np.array(actor_boxes).reshape(-1,8)
-    #     # sensor_T_car = get_sensor_T_actor(actors[0], n_frame)  #TODO  np.eye(4)
-    #     car_T_world = get_actor_T_world(actor, n_frame)
-    #     boxes_in_actor_frame = apply_tf(np.linalg.inv(ego_to_world) @ car_T_world, boxes)
-    #     yaws = actor_boxes[:,6] + np.arctan2(car_T_world[1,0], car_T_world[0,0]) - np.arctan2(ego_to_world[1,0], ego_to_world[0,0])
-    #     yaws = yaws.reshape(-1,1)
-    #     boxes = np.concatenate((boxes_in_actor_frame,actor_boxes[:,3:-2],yaws,actor_boxes[:,-1].reshape(-1,1)), axis=1)
-    #     available_boxes_in_world_frame = np.concatenate((available_boxes_in_world_frame, boxes), axis=0)
-
     return boxes
 
 def filter_points(points: np.ndarray, range: np.ndarray):
@@ -178,19 +159,9 @@ def filter_points(points: np.ndarray, range: np.ndarray):
     return: (M, 3) - x, y, z
     This function is used to filter points within the range
     '''
-
-    # threshold on cloud points on z axis
-    filtered_points = points[np.where(points[:,2] < range[5])]
-
-    # threshold on cloud points on x axis
-    filtered_points = filtered_points[np.where(filtered_points[:,0] > range[0])]
-    filtered_points = filtered_points[np.where(filtered_points[:,0] < range[3])]
-
-    # threshold on cloud points on y axis
-    filtered_points = filtered_points[np.where(filtered_points[:,1] > range[1])]
-    filtered_points = filtered_points[np.where(filtered_points[:,1] < range[4])]
-
-    # filtered_points = points
+    # TODO: filter points within the range
+    
+    filtered_points = points # this is just a dummy value
 
     return filtered_points
 

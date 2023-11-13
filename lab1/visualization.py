@@ -69,20 +69,6 @@ def box_to_corner(box: np.ndarray) -> np.ndarray:  #TO DO
     # TODO: compute coordinate of 8 corners in the frame relative to which the `box` is expressed
     # TODO: Notice the order of 8 corners must be according to the convention stated the function doc string
 
-    # x, y, z, w, l, h,  yaw = box
-    # dx = w / 2
-    # dy = l / 2
-    # dz = h / 2
-    # cos = np.cos(-yaw)
-    # sin = np.sin(-yaw)
-    # corners = np.array([[x + dx*cos + dy*sin , y + dy*cos - dx*sin, z+dz ],
-    #                     [x + dx*cos - dy*sin , y - dy*cos - dx*sin, z+dz ],
-    #                     [x + dx*cos - dy*sin , y - dy*cos - dx*sin, z-dz  ],
-    #                     [x + dx*cos + dy*sin , y + dy*cos - dx*sin, z -dz ],
-    #                     [x - dx*cos + dy*sin , y + dy*cos + dx*sin, z+dz ],
-    #                     [x - dx*cos - dy*sin , y - dy*cos + dx*sin, z+dz ],
-    #                     [x - dx*cos - dy*sin , y - dy*cos + dx*sin, z-dz  ],
-    #                     [x - dx*cos + dy*sin , y + dy*cos + dx*sin, z-dz ]])  
     corners = np.zeros((8, 3))# this is just a dummy value
     
     return corners
@@ -164,12 +150,8 @@ def box_to_pixels(boxes, bev_imsize, bev_resolution):
     pixel_coordinates = []
 
     # TODO: find the pixel coordinates of the corners for all boxes
-    # for corner in corners:
-    #     corner = (corner / bev_resolution + bev_imsize / 2).astype(int)
-
-    #     # fill pixels within corners
-    #     pixel_coordinates.append(corner)
     
+
     # create mask to get all pixels occupied within corners
     mask = np.zeros(bev_imsize, dtype=np.uint8)
     cv2.fillPoly(mask, np.array(pixel_coordinates), 255)
@@ -184,11 +166,6 @@ def points_to_pixels(filtered_points : np.ndarray, bev_imsize: np.ndarray , bev_
     return: pixel coordinates of the points (M, 2)
     '''
     # TODO: find pixel coordinates for the points in bev image
-    # # Take only bev 
-    # bev_points = filtered_points[:, :2]
     
-    # # Find the pixel coordinates of the points
-    # bev_pixels = (bev_points /bev_resolution + bev_imsize / 2).astype(int)
-    
-    bev_pixels = [] 
+    bev_pixels = []  # this is just a dummy value
     return bev_pixels
