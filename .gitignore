@@ -3,3 +3,4 @@ lab1/__pycache__/
 lab1/__pycache__/utils.cpython-38.pyc
 lab1/__pycache__/visualization.cpython-38.pyc
 lab2/
+.gitignore
