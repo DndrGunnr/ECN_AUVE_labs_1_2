@@ -68,21 +68,22 @@ def box_to_corner(box: np.ndarray) -> np.ndarray:  #TO DO
     assert box.shape == (7,), f"expect (7,), get {box.shape}"
     # TODO: compute coordinate of 8 corners in the frame relative to which the `box` is expressed
     # TODO: Notice the order of 8 corners must be according to the convention stated the function doc string
-    x, y, z, w, l, h,  yaw = box
-    dx = w / 2
-    dy = l / 2
-    dz = h / 2
-    cos = np.cos(-yaw)
-    sin = np.sin(-yaw)
-    corners = np.array([[x + dx*cos + dy*sin , y + dy*cos - dx*sin, z+dz ],
-                        [x + dx*cos - dy*sin , y - dy*cos - dx*sin, z+dz ],
-                        [x + dx*cos - dy*sin , y - dy*cos - dx*sin, z-dz  ],
-                        [x + dx*cos + dy*sin , y + dy*cos - dx*sin, z -dz ],
-                        [x - dx*cos + dy*sin , y + dy*cos + dx*sin, z+dz ],
-                        [x - dx*cos - dy*sin , y - dy*cos + dx*sin, z+dz ],
-                        [x - dx*cos - dy*sin , y - dy*cos + dx*sin, z-dz  ],
-                        [x - dx*cos + dy*sin , y + dy*cos + dx*sin, z-dz ]])  
-    # corners = np.zeros((8, 3))# this is just a dummy value
+
+    # x, y, z, w, l, h,  yaw = box
+    # dx = w / 2
+    # dy = l / 2
+    # dz = h / 2
+    # cos = np.cos(-yaw)
+    # sin = np.sin(-yaw)
+    # corners = np.array([[x + dx*cos + dy*sin , y + dy*cos - dx*sin, z+dz ],
+    #                     [x + dx*cos - dy*sin , y - dy*cos - dx*sin, z+dz ],
+    #                     [x + dx*cos - dy*sin , y - dy*cos - dx*sin, z-dz  ],
+    #                     [x + dx*cos + dy*sin , y + dy*cos - dx*sin, z -dz ],
+    #                     [x - dx*cos + dy*sin , y + dy*cos + dx*sin, z+dz ],
+    #                     [x - dx*cos - dy*sin , y - dy*cos + dx*sin, z+dz ],
+    #                     [x - dx*cos - dy*sin , y - dy*cos + dx*sin, z-dz  ],
+    #                     [x - dx*cos + dy*sin , y + dy*cos + dx*sin, z-dz ]])  
+    corners = np.zeros((8, 3))# this is just a dummy value
     
     return corners
 
@@ -146,38 +147,48 @@ def show_objects(ptcloud, boxes, colors):
     show(obj_to_draw)
 
 def box_to_pixels(boxes, bev_imsize, bev_resolution):
-    # box: (1,8) : (cx, cy, cz, l, w, h, yaw)
-    # return: pixel coordinates within the box np.ndarray
+    '''
+    boxes: (N_boxes, 8) : eight corners of the box, according to the convention in `box_to_corner`
+    bev_imsize: (2,) : (height, width) in pixels
+    bev_resolution: (1,) : resolution (m/pixel)
+    return: pixel coordinates of the boxes (N_boxes, 2)
+    '''
 
     corners = [box_to_corner(boxes[i])for i in range(boxes.shape[0])]
-    # Take only bev 
+
+    # We take only top bev of the box
     corners = np.array(corners)
     top = [0,4,5,1]
     corners = corners[:, top, :2]
 
-    
-    # Find the pixel coordinates of the corners
     pixel_coordinates = []
-    for corner in corners:
-        corner = (corner / bev_resolution + bev_imsize / 2).astype(int)
 
-        # fill pixels within corners
-        pixel_coordinates.append(corner)
+    # TODO: find the pixel coordinates of the corners for all boxes
+    # for corner in corners:
+    #     corner = (corner / bev_resolution + bev_imsize / 2).astype(int)
+
+    #     # fill pixels within corners
+    #     pixel_coordinates.append(corner)
+    
     # create mask to get all pixels occupied within corners
     mask = np.zeros(bev_imsize, dtype=np.uint8)
     cv2.fillPoly(mask, np.array(pixel_coordinates), 255)
     
     return mask
 
-def points_to_pixels(filtered_points, bev_imsize, bev_resolution):
-    # filtered_points: (N, 3) : (x, y, z)
-    # return: pixel coordinates within the box np.ndarray
-
-    # Take only bev 
-    bev_points = filtered_points[:, :2]
+def points_to_pixels(filtered_points : np.ndarray, bev_imsize: np.ndarray , bev_resolution: float):
+    '''
+    filtered_points: (M, 3) : (x, y, z)
+    bev_imsize: (2,) : (height, width) in pixels
+    bev_resolution: (1,) : resolution (m/pixel)
+    return: pixel coordinates of the points (M, 2)
+    '''
+    # TODO: find pixel coordinates for the points in bev image
+    # # Take only bev 
+    # bev_points = filtered_points[:, :2]
     
-    # Find the pixel coordinates of the points
-    bev_pixels = (bev_points /bev_resolution + bev_imsize / 2).astype(int)
+    # # Find the pixel coordinates of the points
+    # bev_pixels = (bev_points /bev_resolution + bev_imsize / 2).astype(int)
     
-    
+    bev_pixels = [] 
     return bev_pixels

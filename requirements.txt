@@ -1,8 +1,0 @@
-jupyter
-jupyter-notebook
-open3d
-opencv-python
-einops
-pyquaternion
-networkx
-osmnx
