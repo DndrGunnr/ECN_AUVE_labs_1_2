@@ -33,10 +33,9 @@ This lab provides a comprehensive understanding and hands-on experience with Ope
 - osmnx
 - openstreetmap
 
-This lab is designed to bridge the gap between theoretical knowledge and practical application, preparing you for advanced studies or careers in autonomous vehicle technology.
 
 ## Grading Criteria
-
+This lab is designed to bridge the gap between theoretical knowledge and practical application, preparing you for advanced studies or careers in autonomous vehicle technology.
 Your lab submission will be graded based on the following criteria:
 - Completion of the code and fulfillment of the specified tasks.
 - Correct implementation of heuristic functions and obstacle avoidance logic.
