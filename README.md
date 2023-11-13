@@ -18,7 +18,7 @@ _lab1 data : [https://uncloud.univ-nantes.fr/index.php/s/oiMzTpqiBGniZng](https:
 ## lab2 
 - Dowload the data for the lab2 :
   
-_lab2 data : [https://uncloud.univ-nantes.fr/index.php/s/W564EMYtP39HeXp](https://uncloud.univ-nantes.fr/index.php/s/W564EMYtP39HeXp)
+_lab2 data : [https://uncloud.univ-nantes.fr/index.php/s/W564EMYtP39HeXp](https://uncloud.univ-nantes.fr/index.php/s/W564EMYtP39HeXp)_
 
 - Unzip it in the ECN_AUVE_labs folder.
 - In the file lab2/utils, make sure the _root_path_ param is set to the root of the scenario1 folder
