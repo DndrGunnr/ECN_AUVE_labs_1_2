@@ -14,6 +14,10 @@ This lab focuses on the utilization of Intelligent Road-Side Unit (IRSU) data, p
    - Process and visualize point cloud data from a 32-channel LiDAR.
    - Modify functions in `visualization.py` and `utils.py` to represent the data effectively.
 
+At the end of the first task you should see something like this
+![image](https://github.com/CBeaune/ECN_AUVE_labs_students/assets/57994352/82ca7e5f-98a6-4be9-bade-671dff4bb073)
+
+
 2. Task 2 - Enhancing Vehicle Perception with IRSU Data:
    - Learn how IRSU data can enhance the vehicle's field of view and perception range.
    - Modify and utilize functions in `utils.py` to integrate data from various sources.
