@@ -31,7 +31,7 @@ At the end of the 2nd task you shouls see something like this
 
 At the end of the 3rd task you sould get the following results
 ![image](https://github.com/CBeaune/ECN_AUVE_labs_students/assets/57994352/e6c18298-6f27-40da-8414-c6169de5d8b0)
-![image](https://github.com/CBeaune/ECN_AUVE_labs_students/assets/57994352/153b3732-7c6c-4219-abbb-e011e3bcca1a)
+
 
 
 ## Expected Learning Outcomes:
