@@ -33,6 +33,9 @@ At the end of the 3rd task you sould get the following results
 ![image](https://github.com/CBeaune/ECN_AUVE_labs_students/assets/57994352/e6c18298-6f27-40da-8414-c6169de5d8b0)
 
 
+![image](https://github.com/CBeaune/ECN_AUVE_labs_students/assets/57994352/c3dfa555-c7e6-41ec-86ac-7e926bf70d4b)
+
+
 
 ## Expected Learning Outcomes:
 - Proficiency in visualizing and interpreting LiDAR data.
