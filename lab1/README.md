@@ -21,12 +21,18 @@ At the end of the first task you should see something like this
 2. Task 2 - Enhancing Vehicle Perception with IRSU Data:
    - Learn how IRSU data can enhance the vehicle's field of view and perception range.
    - Modify and utilize functions in `utils.py` to integrate data from various sources.
+
 At the end of the 2nd task you shouls see something like this
 ![image](https://github.com/CBeaune/ECN_AUVE_labs_students/assets/57994352/6c16cd43-f48b-45f3-9cd9-f838232d3efb)
 
 3. Task 3 - Building an Occupancy Grid:
    - Construct a Bird's Eye View (BEV) occupancy grid of the environment.
    - Understand the significance of occupancy grids in autonomous vehicle navigation.
+
+At the end of the 3rd task you sould get the following results
+![image](https://github.com/CBeaune/ECN_AUVE_labs_students/assets/57994352/e6c18298-6f27-40da-8414-c6169de5d8b0)
+![image](https://github.com/CBeaune/ECN_AUVE_labs_students/assets/57994352/153b3732-7c6c-4219-abbb-e011e3bcca1a)
+
 
 ## Expected Learning Outcomes:
 - Proficiency in visualizing and interpreting LiDAR data.
