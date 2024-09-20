@@ -38,23 +38,14 @@ At the end of the 3rd task you sould get the following results
 
 
 ## Expected Learning Outcomes:
-- Proficiency in visualizing and interpreting LiDAR data.
-- Knowledge of how IRSU data can augment vehicle perception capabilities.
-- Skills in environmental mapping through occupancy grid construction.
+- Visualizing and interpreting LiDAR data.
+- Knowledge of how IRSU data can augment single vehicle perception.
+- Occupancy grid construction.
 
 ## Ressources:
 - networkX
 - osmnx
 - openstreetmap
-
-
-## Grading Criteria
-This lab is designed to bridge the gap between theoretical knowledge and practical application, preparing you for advanced studies or careers in autonomous vehicle technology.
-Your lab submission will be graded based on the following criteria:
-- Completion of the code and fulfillment of the specified tasks.
-- Successful testing of the code.
-- Code readability, comments, and documentation in the report.
-- Adherence to good programming practices.
 
 ## Deadline
 The deadline for this lab submission is the *4th of December (11:59 pm)* on Hippocampus website 
