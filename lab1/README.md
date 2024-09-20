@@ -48,7 +48,7 @@ At the end of the 3rd task you sould get the following results
 - openstreetmap
 
 ## Deadline
-The deadline for this lab submission is the *4th of December (11:59 pm)* on Hippocampus website 
+The deadline for this lab submission is the *TBD* on Hippocampus website 
 Upload the following completed files:
 
 - lab1.ipynb
