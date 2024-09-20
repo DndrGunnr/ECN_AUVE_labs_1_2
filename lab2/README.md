@@ -6,7 +6,7 @@
 3. Gain practical experience in designing, implementing, and testing local planners.
 
 ## Description:
-This lab provides a comprehensive understanding and hands-on experience with OpenStreetMap maps and the development of local planners for autonomous vehicles. You will learn how to load and visualize OSM maps and implement pathfinding algorithms in a simulated environment. This experience is crucial for further study or work in the field of autonomous vehicle technology.
+This lab provides an understanding and experience with OpenStreetMap maps and the development of local planners for autonomous vehicles. You will learn how to load and visualize OSM maps and implement pathfinding algorithms in a simulated environment.
 
 ## Steps:
 1. Load and Visualize OSM Maps:
@@ -34,17 +34,8 @@ This lab provides a comprehensive understanding and hands-on experience with Ope
 - openstreetmap
 
 
-## Grading Criteria
-This lab is designed to bridge the gap between theoretical knowledge and practical application, preparing you for advanced studies or careers in autonomous vehicle technology.
-Your lab submission will be graded based on the following criteria:
-- Completion of the code and fulfillment of the specified tasks.
-- Correct implementation of heuristic functions and obstacle avoidance logic.
-- Successful testing of the code on the scenario.
-- Code readability, comments, and documentation in the report.
-- Adherence to good programming practices.
-
 ## Deadline
-The deadline for this lab submission is the *4th of December (11:59 pm)* on Hippocampus website 
+The deadline for this lab submission is the *TBD* on Hippocampus website 
 Upload the following completed files:
 
 - lab2.ipynb
