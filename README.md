@@ -1,5 +1,7 @@
 # ECN_AUVE_labs
 
+*Open3D library allow python versions up to 3.11*
+
 Create a folder _ECN_AUVE_labs_ in your machine
 Clone this repo inside the _ECN_AUVE_labs_ folder and rename it _labs_
 
