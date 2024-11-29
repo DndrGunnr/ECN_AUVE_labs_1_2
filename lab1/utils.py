@@ -1,6 +1,6 @@
 import numpy as np
 import open3d as o3d
-
+import math
 import os
 from os import path as osp
 
@@ -22,7 +22,7 @@ CLASS_NAME_TO_COLOR = dict(zip(CLASS_NAMES, CLASS_COLORS))
 CLASS_NAME_TO_INDEX = dict(zip(CLASS_NAMES, range(len(CLASS_NAMES))))
 
 # Path extraction
-root_path = "/home/user/ECN_AUVE_labs/scenario1"
+root_path = r"C:\Users\enric\Desktop\open3d_lab\scenario1"
 
 scenario = "Town01_type001_subtype0001_scenario00003"  
 
@@ -37,7 +37,7 @@ line = lines[2]
 agents =  [int(agent) for agent in line.split()[2:]]
 
 for file_path in file_list:
-    frame_list.append(file_path.split('/')[-1].split('.')[0])
+    frame_list.append(file_path.split('/')[-1].split('.')[0].split('\\')[-1])
 frame_list.sort()
 # ---------------------------------------------
 # ---------------------------------------------
@@ -76,7 +76,7 @@ def get_sensor_T_actor(actor, n_frame):
 def get_point_cloud(n_frame, actor):
 
     frame = frame_list[n_frame] 
-    lidar_data = np.load(root_path +  '/' + actor + '/lidar01/' + scenario +'/' + frame + '.npz')['data']
+    lidar_data = np.load(osp.join(root_path, actor, 'lidar01', scenario, frame + '.npz'))['data']
     lidar_T_actor = get_sensor_T_actor(actor, n_frame)
     lidar_data_actor = apply_tf(lidar_T_actor, lidar_data) #in actor frame
  
@@ -91,17 +91,30 @@ def get_available_point_clouds(n_frame, actors):
     This function is used to get all point clouds available in ego frame
     '''
     ego_to_world = get_actor_T_world(actors[0], n_frame) # the transformation from ego frame to world frame
+    # Get the transformation from world frame to ego frame
+    world_to_ego = np.linalg.inv(ego_to_world)
     merged_pc = get_point_cloud(n_frame, actors[0]) #in ego frame
 
     # TODO: retrieve point clouds in actor frame for all actors and merge them into one point cloud in ego frame
-    for actor in actors[1:]:
-        pass 
-        # TODO: map `lidar_data_actor` from actor frame to ego frame
+ 
+    for actor in actors[1:]: 
+        
+        # Get the transformation from i-th actor frame to world frame
+        actor_to_world = get_actor_T_world(actor, n_frame)
+
+        # Get the transformation from i-th actor frame to ego frame
+        actor_to_ego = np.dot(world_to_ego, actor_to_world)
+
+        lidar_data_actor = get_point_cloud(n_frame, actor)
+        lidar_data_ego = apply_tf(actor_to_ego, lidar_data_actor)
+
+        merged_pc = np.concatenate((merged_pc, lidar_data_ego), axis=0)
+
         
     return merged_pc
 
-def get_boxes_in_sensor_frame(n_frame, actor):
 
+def get_boxes_in_sensor_frame(n_frame, actor):
     frame = frame_list[n_frame] 
     with open(osp.join(root_path,  actor ,'label',scenario, frame + '.txt'), 'r') as f:
         lines = f.readlines()
@@ -128,9 +141,13 @@ def get_boxes_in_actor_frame(n_frame, actor): # TODO
     boxes = get_boxes_in_sensor_frame(n_frame, actor)
     boxes = np.array(boxes).reshape(-1,8) #in sensor frame
 
-    # TODO: map `boxes` from sensor frame to actor frame
-
-
+        # Map boxes from sensor frame to actor frame
+    sensor_T_actor = get_sensor_T_actor(actor, n_frame)
+    for i in range(len(boxes)):
+        box_center = np.append(boxes[i][:3], 1)  # (x, y, z, 1)
+        box_center_actor_frame = sensor_T_actor @ box_center
+        boxes[i][:3] = box_center_actor_frame[:3]
+        
     return boxes
 
 def get_available_boxes_in_ego_frame(n_frame, actors):
@@ -142,14 +159,38 @@ def get_available_boxes_in_ego_frame(n_frame, actors):
     This function is used to get all available boxes by the actors in ego frame
     '''
 
-    boxes = get_boxes_in_actor_frame(n_frame, actors[0]) #in ego frame
-    boxes = np.array(boxes).reshape(-1,8)
     ego_to_world = get_actor_T_world(actors[0], n_frame)
-    available_boxes_in_world_frame = boxes
+    world_to_ego = np.linalg.inv(ego_to_world)
 
-    # TODO : retrieve boxes in actor frame for all actors
+    # Get boxes in ego frame
+    boxes = get_boxes_in_actor_frame(n_frame, actors[0])
+    boxes = np.array(boxes).reshape(-1, 8)
+    available_boxes_in_ego_frame = boxes
 
-    return boxes
+    # Retrieve boxes in actor frame for all actors and transform them to ego frame
+    for actor in actors[1:]:
+        actor_to_world = get_actor_T_world(actor, n_frame)
+        actor_to_ego = np.dot(world_to_ego, actor_to_world)
+
+        boxes = get_boxes_in_actor_frame(n_frame, actor)
+        boxes = np.array(boxes).reshape(-1, 8)
+
+        for i in range(len(boxes)):
+            box_center = np.append(boxes[i][:3], 1)  # (x, y, z, 1)
+            box_center_ego_frame = actor_to_ego @ box_center
+            boxes[i][:3] = box_center_ego_frame[:3]
+
+            # Rotate from actor to ego frame
+            yaw = boxes[i][6]
+            rotation_matrix = actor_to_ego[:3, :3]
+            yaw_ego_frame = np.arctan2(rotation_matrix[1, 0], rotation_matrix[0, 0]) + yaw
+            boxes[i][6] = yaw_ego_frame
+
+        available_boxes_in_ego_frame = np.concatenate((available_boxes_in_ego_frame, boxes), axis=0)
+
+    return available_boxes_in_ego_frame
+
+
 
 def filter_points(points: np.ndarray, range: np.ndarray):
     '''
@@ -159,9 +200,56 @@ def filter_points(points: np.ndarray, range: np.ndarray):
     return: (M, 3) - x, y, z
     This function is used to filter points within the range
     '''
-    # TODO: filter points within the range
-    
-    filtered_points = points # this is just a dummy value
-
+    # : filter points within the range
+    xmin, ymin, zmin, xmax, ymax, zmax = range
+    filtered_points = []
+    for point in points:
+        x, y, z = point
+        if x > xmin and x < xmax and y > ymin and y < ymax and z > zmin and z < zmax:
+            filtered_points.append(point)
+    filtered_points = np.array(filtered_points)
     return filtered_points
 
+
+def detection_obj(n_frame,actors,method):
+    '''
+    :param n_frame: 
+    :param actors: a list of actors, the first one is ego vehicle
+    :param method: a string, describes type of objects to segment out
+
+    This function is used to get only the boxes specified by method
+    '''
+    irsu_boxes = get_available_boxes_in_ego_frame(n_frame, actors)
+    car = 0.0
+    truck = 1.0
+    motorcycle = 2.0
+    pedestrian = 3.0
+    boxes_car = []
+    boxes_truck = []
+    boxes_motorcycle = []
+    boxes_pedestrian = []
+
+    # Filter the objects
+    for box in irsu_boxes:
+        if(car == box[7]):
+            boxes_car.append(box)
+        if(truck == box[7]):
+            boxes_truck.append(box)
+        if(motorcycle == box[7]):
+            boxes_motorcycle.append(box)
+        if(pedestrian == box[7]):
+            boxes_pedestrian.append(box)
+
+    # Choose the boxes list based on method
+    if method == 'Car':
+        boxes = np.array(boxes_car)
+    elif method == 'Truck':
+        boxes = np.array(boxes_truck)
+
+    elif method == 'Motorcycle':
+        boxes = np.array(boxes_motorcycle)
+    elif method == 'Pedestrians':
+        boxes = np.array(boxes_pedestrian)
+    elif method == 'All':
+        boxes = irsu_boxes
+    return boxes

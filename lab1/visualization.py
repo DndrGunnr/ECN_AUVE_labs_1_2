@@ -57,7 +57,7 @@ def create_cube_o3d(corners: np.ndarray, color: Tuple[float] = None):
     return cube
 
 
-def box_to_corner(box: np.ndarray) -> np.ndarray:  #TO DO
+def box_to_corner(box: np.ndarray) -> np.ndarray:
     """
     Compute coordinate of box's corners. Convention
     forward face: 0 - 1 - 2 - 3, backward face: 4 - 5 - 6 - 7, top face: 0 - 4 - 5 - 1
@@ -66,12 +66,30 @@ def box_to_corner(box: np.ndarray) -> np.ndarray:  #TO DO
     :return: (8, 3)
     """
     assert box.shape == (7,), f"expect (7,), get {box.shape}"
-    # TODO: compute coordinate of 8 corners in the frame relative to which the `box` is expressed
-    # TODO: Notice the order of 8 corners must be according to the convention stated the function doc string
 
-    corners = np.zeros((8, 3))# this is just a dummy value
-    
-    return corners
+    center_x, center_y, center_z, dx, dy, dz, yaw = box
+
+    # Rotation matrix around the Z-axis
+    cos_yaw = np.cos(yaw)
+    sin_yaw = np.sin(yaw)
+    rotation_matrix = np.array([
+        [cos_yaw, -sin_yaw, 0],
+        [sin_yaw, cos_yaw, 0],
+        [0, 0, 1]
+    ])
+
+    # Define the 8 corners in the local frame
+    x_corners = dx / 2 * np.array([1, 1, 1, 1, -1, -1, -1, -1])
+    y_corners = dy / 2 * np.array([1, -1, -1, 1, 1, -1, -1, 1])
+    z_corners = dz / 2 * np.array([1, 1, -1, -1, 1, 1, -1, -1])
+
+    corners_local = np.vstack((x_corners, y_corners, z_corners)).T
+
+    # Apply rotation and translation
+    corners_global = np.dot(corners_local, rotation_matrix.T)
+    corners_global += np.array([center_x, center_y, center_z])
+
+    return corners_global 
 
 
 def show_point_cloud(points: np.ndarray, boxes: np.ndarray = None, point_colors: np.ndarray = None,
@@ -140,32 +158,42 @@ def box_to_pixels(boxes, bev_imsize, bev_resolution):
     return: pixel coordinates of the boxes (N_boxes, 2)
     '''
 
-    corners = [box_to_corner(boxes[i])for i in range(boxes.shape[0])]
+    corners = [box_to_corner(boxes[i]) for i in range(boxes.shape[0])]
 
     # We take only top bev of the box
     corners = np.array(corners)
-    top = [0,4,5,1]
+    top = [0, 4, 5, 1]
     corners = corners[:, top, :2]
 
     pixel_coordinates = []
 
-    # TODO: find the pixel coordinates of the corners for all boxes
-    
+    # Find the pixel coordinates of the corners for all boxes
+    for box_corners in corners:
+        pixel_corners = []
+        for corner in box_corners:
+            pixel_x = int(corner[0] / bev_resolution + bev_imsize[1] / 2)
+            pixel_y = int(bev_imsize[0] / 2 - corner[1] / bev_resolution)
+            pixel_corners.append([pixel_x, pixel_y])
+        pixel_coordinates.append(pixel_corners)
 
-    # create mask to get all pixels occupied within corners
+    # Create mask to get all pixels occupied within corners
     mask = np.zeros(bev_imsize, dtype=np.uint8)
-    cv2.fillPoly(mask, np.array(pixel_coordinates), 255)
-    
+    cv2.fillPoly(mask, np.array(pixel_coordinates, dtype=np.int32), 255)
+
     return mask
 
-def points_to_pixels(filtered_points : np.ndarray, bev_imsize: np.ndarray , bev_resolution: float):
+def points_to_pixels(filtered_points: np.ndarray, bev_imsize: np.ndarray, bev_resolution: float):
     '''
     filtered_points: (M, 3) : (x, y, z)
     bev_imsize: (2,) : (height, width) in pixels
     bev_resolution: (1,) : resolution (m/pixel)
     return: pixel coordinates of the points (M, 2)
     '''
-    # TODO: find pixel coordinates for the points in bev image
-    
-    bev_pixels = []  # this is just a dummy value
-    return bev_pixels
+    bev_pixels = []
+
+    for point in filtered_points:
+        pixel_x = int(point[0] / bev_resolution + bev_imsize[1] / 2)
+        pixel_y = int(bev_imsize[0] / 2 - point[1] / bev_resolution)
+        bev_pixels.append([pixel_x, pixel_y])
+
+    return np.array(bev_pixels)
