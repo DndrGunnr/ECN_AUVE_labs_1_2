@@ -17,9 +17,7 @@ _lab1 data : [https://uncloud.univ-nantes.fr/index.php/s/oiMzTpqiBGniZng](https:
 
 [Lab 1 files](https://github.com/CBeaune/ECN_AUVE_labs_students/tree/student_version/lab1)
 
-### Useful Resources for this lab (I advise you to keep an eye on that!)
-- [numpy documentation ](https://numpy.org/doc/stable/reference/arrays.html) 
-- [DeepAccident dataset presentation](https://deepaccident.github.io/)
+
   
 ## Lab 2: Global and Local Planning for Autonomous Vehicles 
 - Dowload the data for the lab2 :
