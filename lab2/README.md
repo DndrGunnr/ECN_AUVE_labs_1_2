@@ -1,42 +1,18 @@
-# Lab 2: Using OpenStreetMap for Autonomous Vehicle Local Planners
+# Lab 2: Using OpenStreetMap for Autonomous Vehicle Global and Local Planners
+## Getting used to the Osmnx library
+The first part of the lab involved getting to know the Osmnx library to use the data from Open Street Maps to compute paths between geographical points, using the built-in functions from osmnx. Then plotting the same path manually importing the nodes and edges from the Map and adjusting the lengths of the edges to provide a faithful geographical representation of the path. This was done taking into account the planar projection of the considered region (in our case from the city of Nantes), using the _Lambert 93_ conic projection:  
+![image](https://github.com/user-attachments/assets/6be23a95-8003-491e-a390-771e0b1df53f)
+![image](https://github.com/user-attachments/assets/7e0efc6f-43ec-4089-b973-ade55c869aef)
 
-## Objectives:
-1. Understand the fundamentals of OpenStreetMap (OSM) maps.
-2. Develop an understanding of local planners for autonomous vehicles.
-3. Gain practical experience in designing, implementing, and testing local planners.
-
-## Description:
-This lab provides an understanding and experience with OpenStreetMap maps and the development of local planners for autonomous vehicles. You will learn how to load and visualize OSM maps and implement pathfinding algorithms in a simulated environment.
-
-## Steps:
-1. Load and Visualize OSM Maps:
-   - Use the osmnx library to load an OSM map for a specified location.
-   - Visualize the OSM graph, nodes, and edges for this location.
-   - Select an area of interest on https://www.openstreetmap.org to work with.
-
-2. Implement Global Path Finding:
-   - Determine a path from an arbitrary origin to a destination using the nx library.
-   - Plot this path on the OSM graph.
-   - Analyze the chosen path for its feasibility and efficiency.
-
-3. Implement a simplified Dynamic Window Approach (DWA) for local planning 
-   - Implement cost functions 
-   - Implement evolution model (based on the constant velocity bicycle model)
-
-## Expected Learning Outcomes:
-- Comprehensive understanding of OSM maps and their application in autonomous vehicle navigation.
-- Ability to design, implement, and test local planners for autonomous vehicles in a simulated environment.
-- Skills in analyzing and interpreting simulated navigation data.
-
-## Ressources:
-- networkX
-- osmnx
-- openstreetmap
+## Implementing a global planner
+This second task was decoupled from the first one, here it involved a simple graph that was used as a benchmark for the implementation of an A* global planning algorithm, described in the `custom_a_star` function, coupled with the `custom_heuristic` function, in our case it was simply the air distance between starting and ending point.
+![image](https://github.com/user-attachments/assets/ea8a7127-c0d2-4527-838a-e034287ecaf7)
+![image](https://github.com/user-attachments/assets/0d75b4de-09ba-40f8-a2b5-b837803cfa0b)
+## Implementing a local planner
+Using as a foundation, the global planner developed in the second task, the objective of this last exercise was to create a _local path planner_ that could avoid potential obstacles, to do so it was chosen an algorithm based on the **dynamic window approach**
 
 
-## Deadline
-The deadline for this lab submission is the *TBD* on Hippocampus website 
-Upload the following completed files:
 
-- lab2.ipynb
-- osmnx_utils.py 
+
+
+
